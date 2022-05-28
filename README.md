@@ -31,7 +31,7 @@
 git clone https://github.com/lemondreamtobe/lemon-react-app react-app
 
 cd react-app
-
+yarn
 yarn start
 yarn build
 ```
