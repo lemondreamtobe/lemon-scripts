@@ -18,7 +18,8 @@
     "access": "public"
   },
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "https://github.com/lemondreamtobe/lemon-scripts"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
