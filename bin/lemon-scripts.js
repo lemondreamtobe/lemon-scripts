@@ -1,11 +1,3 @@
-#!/usr/bin/env node
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 'use strict';
 
 // Makes the script crash on unhandled rejections instead of silently
@@ -54,6 +46,6 @@ if (['build', 'eject', 'start', 'test'].includes(script)) {
   console.log('Unknown script "' + script + '".');
   console.log('Perhaps you need to update react-scripts?');
   console.log(
-    'See: https://facebook.github.io/create-react-app/docs/updating-to-new-releases'
+    'See: https://github.com/lemondreamtobe/lemon-scripts'
   );
 }
