@@ -18,7 +18,7 @@
 - [x] 原生支持移动端h5适配
 - [x] 原生支持webpack analyze，随时掌握项目五脏六腑
 - [x] 原生支持alias resolve，跟ts paths无缝结合
-- [ ] 同时支持多页和单页
+- [x] 同时支持多页和单页
 - [ ] ....
 - [ ] ...
 - [ ] ..
@@ -134,7 +134,7 @@ lemon scripts内置了webpack analyze plugin，如何开启分析，只需要命
   }
 ```
 
-#### 同时支持多页和单页
+### 同时支持多页和单页
 ```js
 // package.json
 "multiPage": true
