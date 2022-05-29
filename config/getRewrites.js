@@ -13,5 +13,4 @@ function getRewrites() {
     }
 }
 
-console.log(getRewrites());
 module.exports = getRewrites;
