@@ -19,7 +19,7 @@ const scriptIndex = args.findIndex(
 const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
 const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
-if (['build', 'eject', 'start', 'test'].includes(script)) {
+if (['build', 'start', 'test'].includes(script)) {
   const result = spawn.sync(
     process.execPath,
     nodeArgs
