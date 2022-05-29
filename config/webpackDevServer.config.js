@@ -7,6 +7,7 @@ const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const redirectServedPath = require('react-dev-utils/redirectServedPathMiddleware');
 const paths = require('./paths');
 const getHttpsConfig = require('./getHttpsConfig');
+const getRewrites = require('./getRewrites');
 
 const host = process.env.HOST || '0.0.0.0';
 const sockHost = process.env.WDS_SOCKET_HOST;
@@ -98,6 +99,7 @@ module.exports = function (proxy, allowedHost) {
       // See https://github.com/facebook/create-react-app/issues/387.
       disableDotRule: true,
       index: paths.publicUrlOrPath,
+      rewrites: getRewrites()
     },
     // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
     proxy,

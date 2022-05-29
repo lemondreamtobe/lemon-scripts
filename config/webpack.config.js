@@ -18,8 +18,10 @@ const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 const ESLintPlugin = require('eslint-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackHtmlCdnPlugin = require("./plugins/cdn2Html");
+const appEntry = require("./getEntry");
+const getOutPut = require("./getOutPut");
 
-const getMeta = require('./getMeta');
+const getHtmlWebpackPlugin = require("./getHtmlWebpackPlugin");
 const paths = require('./paths');
 const modules = require('./modules');
 const getClientEnvironment = require('./env');
@@ -220,35 +222,8 @@ module.exports = function (webpackEnv) {
       : isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
-    entry: paths.appIndexJs,
-    output: {
-      // The build folder.
-      path: paths.appBuild,
-      // Add /* filename */ comments to generated require()s in the output.
-      pathinfo: isEnvDevelopment,
-      // There will be one main bundle, and one file per asynchronous chunk.
-      // In development, it does not produce real files.
-      filename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
-      // There are also additional JS chunk files if you use code splitting.
-      chunkFilename: isEnvProduction
-        ? 'static/js/[name].[contenthash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
-      assetModuleFilename: 'static/media/[name].[hash][ext]',
-      // webpack uses `publicPath` to determine where the app is being served from.
-      // It requires a trailing slash, or the file assets will get an incorrect path.
-      // We inferred the "public path" (such as / or /my-project) from homepage.
-      publicPath: paths.publicUrlOrPath,
-      // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: isEnvProduction
-        ? info =>
-          path
-            .relative(paths.appSrc, info.absoluteResourcePath)
-            .replace(/\\/g, '/')
-        : isEnvDevelopment &&
-        (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
-    },
+    entry: appEntry,
+    output: getOutPut(webpackEnv),
     cache: {
       type: 'filesystem',
       version: createEnvironmentHash(env.raw),
@@ -608,32 +583,7 @@ module.exports = function (webpackEnv) {
         modules: getCDNModules()
       }),
       // Generates an `index.html` file with the <script> injected.
-      new HtmlWebpackPlugin(
-        Object.assign(
-          {},
-          getMeta(),
-          {
-            inject: true,
-            template: paths.appHtml,
-          },
-          isEnvProduction
-            ? {
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true,
-              },
-            }
-            : undefined
-        )
-      ),
+      ...getHtmlWebpackPlugin(),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358
@@ -679,7 +629,7 @@ module.exports = function (webpackEnv) {
       //   `index.html`
       // - "entrypoints" key: Array of files which are included in `index.html`,
       //   can be used to reconstruct the HTML if necessary
-      new WebpackManifestPlugin({
+      !paths.multiPage && new WebpackManifestPlugin({
         fileName: 'asset-manifest.json',
         publicPath: paths.publicUrlOrPath,
         generate: (seed, files, entrypoints) => {
@@ -687,10 +637,12 @@ module.exports = function (webpackEnv) {
             manifest[file.name] = file.path;
             return manifest;
           }, seed);
-          const entrypointFiles = entrypoints.main.filter(
+
+          let entrypointFiles = [];
+
+          entrypointFiles = entrypoints.main.filter(
             fileName => !fileName.endsWith('.map')
           );
-
           return {
             files: manifestFiles,
             entrypoints: entrypointFiles,

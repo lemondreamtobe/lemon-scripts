@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
+const globby = require('globby');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebook/create-react-app/issues/637
@@ -50,6 +51,12 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
+const entriesPath = globby.sync([resolveApp('src/pages') + '/*/index.tsx']).map(filePath => {
+  let tmp = filePath.split('/');
+  let name = tmp[tmp.length - 2];
+  return {path: filePath, name}
+});
+
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
@@ -60,6 +67,7 @@ module.exports = {
   appIndexJs: resolveModule(resolveApp, 'src/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
+  appSrcPages: resolveApp('src/pages'),
   appTsConfig: resolveApp('tsconfig.json'),
   appTsPathConfig: resolveApp('tsconfig.paths.json'),
   appJsConfig: resolveApp('jsconfig.json'),
@@ -71,8 +79,12 @@ module.exports = {
   appTsBuildInfoFile: resolveApp('node_modules/.cache/tsconfig.tsbuildinfo'),
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
+  entriesPath,
+  multiPage: require(resolveApp('package.json')).multiPage,
 };
 
 
 
 module.exports.moduleFileExtensions = moduleFileExtensions;
+module.exports.resolveModule = resolveModule;
+module.exports.resolveApp = resolveApp;
