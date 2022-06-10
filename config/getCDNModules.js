@@ -5,6 +5,7 @@ const appPackage = require(paths.appPackageJson);
 
 function getCDNModules() {
     const moduleFromPackage = appPackage.cdnModules || [];
+    const ignoresCdnPackage = appPackage.ignoresCdnPackage || [];
 
     if (moduleFromPackage.length) {
 
@@ -26,7 +27,7 @@ function getCDNModules() {
             { name: 'mobx', _var: 'mobx', path: `mobx.umd.${cdnEnv}.js` },
             { name: 'mobx-react-lite', _var: 'mobxReactLite', path: `mobxreactlite.umd.${cdnEnv}.js` },
             { name: 'axios', _var: 'axios', path: `https://cdn.staticfile.org/axios/0.21.4/axios.min.js` },
-        ]
+        ].filter(i => !ignoresCdnPackage.includes(i.name));
     }
 }
 
