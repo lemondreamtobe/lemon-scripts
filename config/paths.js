@@ -51,10 +51,25 @@ const resolveModule = (resolveFn, filePath) => {
   return resolveFn(`${filePath}.js`);
 };
 
+const fliterModules = (() => {
+  const index = process.argv.findIndex(i => i === '--multiPage');
+  
+  if (index === process.argv.length - 1) {
+    return [];
+  } else {
+    return process.argv.slice(index + 1, process.argv.length);
+  }
+})();
+
 const entriesPath = globby.sync([resolveApp('src/pages') + '/*/index.tsx']).map(filePath => {
   let tmp = filePath.split('/');
   let name = tmp[tmp.length - 2];
   return {path: filePath, name}
+}).filter(i => {
+
+  if (fliterModules.length === 0) return true;
+
+  return !!fliterModules.find(name => i.name === name);
 });
 
 // config after eject: we're in ./config/
@@ -80,7 +95,7 @@ module.exports = {
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
   entriesPath,
-  multiPage: require(resolveApp('package.json')).multiPage,
+  multiPage: require(resolveApp('package.json')).multiPage || process.argv.includes('--multiPage'),
 };
 
 
