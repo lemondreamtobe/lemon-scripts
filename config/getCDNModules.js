@@ -21,12 +21,12 @@ function getCDNModules() {
         return [
             { name: 'react', _var: 'React', path: `umd/react.${cdnEnv}.js` },
             { name: 'react-dom', _var: 'ReactDOM', path: `umd/react-dom.${cdnEnv}.js` },
-            { name: 'history', _var: 'history', path: `history.${cdnEnv}.js` },
+            { name: '@remix-run/router', _var: '@remix-run/router', path: `https://require.mp.sztv.com.cn/cdn/router.umd.min.j` },
             { name: 'react-router', _var: 'ReactRouter', path: `react-router.${cdnEnv}.js` },
             { name: 'react-router-dom', _var: 'ReactRouterDOM', path: `react-router-dom.${cdnEnv}.js` },
             { name: 'mobx', _var: 'mobx', path: `mobx.umd.${cdnEnv}.js` },
             { name: 'mobx-react-lite', _var: 'mobxReactLite', path: `mobxreactlite.umd.${cdnEnv}.js` },
-            { name: 'axios', _var: 'axios', path: `https://cdn.staticfile.org/axios/0.21.4/axios.min.js` },
+            { name: 'axios', _var: 'axios', path: `axios.js` },
         ].filter(i => !ignoresCdnPackage.includes(i.name));
     }
 }
