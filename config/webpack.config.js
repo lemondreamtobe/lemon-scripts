@@ -39,6 +39,12 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const getCDNModules = require('./getCDNModules');
 
+const externals = getCDNModules().reduce((prev, next) => {
+  return {
+      ...prev,
+      [next.name]: next._var
+  }
+}, {});
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
@@ -225,6 +231,7 @@ module.exports = function (webpackEnv) {
     // This means they will be the "root" imports that are included in JS bundle.
     entry: appEntry,
     output: getOutPut(webpackEnv),
+    externals,
     cache: {
       type: 'filesystem',
       version: createEnvironmentHash(env.raw),

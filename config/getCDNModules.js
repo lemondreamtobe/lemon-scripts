@@ -28,7 +28,9 @@ function getCDNModules() {
             { name: 'mobx', _var: 'mobx', path: `mobx.umd.${cdnEnv}.js` },
             { name: 'mobx-react-lite', _var: 'mobxReactLite', path: `mobxreactlite.umd.${cdnEnv}.js` },
             { name: 'axios', _var: 'axios', path: `axios.js` },
-        ].filter(i => !ignoresCdnPackage.includes(i.name));
+            { name: 'lodash', _var: '_', path: `https://cdn.staticfile.org/lodash.js/4.17.21/lodash.min.js` },
+            { name: 'mockjs', _var: 'Mock', path: `https://cdn.staticfile.org/Mock.js/1.0.0/mock-min.js`, env: "development" },
+        ].filter(i => !ignoresCdnPackage.includes(i.name)).filter(i => !i.env || i.env === process.env.NODE_ENV);
     }
 }
 
