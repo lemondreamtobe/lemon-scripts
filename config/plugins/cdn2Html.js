@@ -24,7 +24,7 @@ const getModulesVersion = () => {
 const package_version = getModulesVersion();
 
 let cdnSource = [];
-
+const ifPro = process.env.NODE_ENV === 'production';
 
 const cdnSourcePaths = appPackage.cdnSourcePaths || 'https://cdn.staticfile.org';
 
@@ -101,7 +101,7 @@ class WebpackExternalsCdnPlugin {
                     "WebpackExternalsCdnPlugin",
                     (data, cb) => {
                         cdnSource.forEach((item) => {
-                            data.headTags.push({
+                            paths.ifInsertCdnScript && data.headTags.push({
                                 tagName: "script",
                                 voidTag: false,
                                 attributes: { defer: false, src: item.path },

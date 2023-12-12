@@ -72,6 +72,11 @@ const entriesPath = globby.sync([resolveApp('src/pages') + '/*/index.tsx']).map(
   return !!fliterModules.find(name => i.name === name);
 });
 
+// 判断是否是Undefined
+const isUndefined = (value) => {
+  return value === undefined;
+};
+
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
@@ -95,6 +100,7 @@ module.exports = {
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
   entriesPath,
+  ifInsertCdnScript: isUndefined(require(resolveApp('package.json')).ifInsertCdnScript) ? true : require(resolveApp('package.json')).ifInsertCdnScript,
   multiPage: require(resolveApp('package.json')).multiPage || process.argv.includes('--multiPage'),
 };
 
